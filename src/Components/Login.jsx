@@ -12,6 +12,7 @@ function Login({ onLogin }) {
 
   return (
     <div>
+      <h1>Gestión de un bar</h1>
       <h2>Iniciar sesión</h2>
       <form onSubmit={handleSubmit}>
         <div>
