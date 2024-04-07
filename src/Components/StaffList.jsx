@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './Style/StaffList.css'
+import './Style/Style.css'
 
 const StaffList = () => {
   const [staffs, setStaffs] = useState([]);
@@ -27,7 +27,7 @@ const StaffList = () => {
     };
 
     fetchStaffList();
-  }, [updatedStaff]);
+  }, [showCreateModal, updatedStaff]);
 
   const remove = async (id) => {
     try {
@@ -131,19 +131,28 @@ const StaffList = () => {
       )}
 
       <div className="staff-container">
-      <button className="button-create" onClick={() => setShowCreateModal(true)}>Crear usuario</button><br /> <br />
-        {staffs.map(staff => (
-          <div className="staff-item" key={staff.staffId}>
-            <div className="staff-details">
-              <span className="staff-username">{staff.username}</span>
-              <div className="staff-buttons">
-                <button className="button-delete" onClick={() => remove(staff.staffId)}>Eliminar</button>
-                <button className="button-edit" onClick={() => handleUpdateModal(staff)}>Editar</button>
-              </div>
-            </div>
-          </div>
-        ))}
+        <button className="button-create" onClick={() => setShowCreateModal(true)}>Crear usuario</button><br />
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {staffs.map(staff => (
+              <tr key={staff.staffId}>
+                <td>{staff.username}</td>
+                <td>
+                  <button className="button-delete" onClick={() => remove(staff.staffId)}>❌</button>
+                  <button className="button-edit" onClick={() => handleUpdateModal(staff)}>✏️</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
+
     </div>
   );
 }
