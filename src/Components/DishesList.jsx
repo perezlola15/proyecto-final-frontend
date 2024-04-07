@@ -33,7 +33,7 @@ const DishesList = () => {
 
     const removeDish = async (id) => {
         try {
-            await axios.delete('http://localhost:8082/project/api/dishes/${id}');
+            await axios.delete(`http://localhost:8082/project/api/dishes/${id}`);
             let updatedDishes = dishes.filter(dish => dish.dishId !== id);
             setDishes(updatedDishes);
         } catch (error) {
@@ -43,7 +43,7 @@ const DishesList = () => {
 
     const updateDish = async (id, updatedDish) => {
         try {
-            await axios.put('http://localhost:8082/project/api/dishes/${id}', updatedDish);
+            await axios.put(`http://localhost:8082/project/api/dishes/${id}`, updatedDish);
             setShowUpdateModal(false); // Cerrar modal después de actualizar
         } catch (error) {
             console.error('Error updating dish:', error);
@@ -53,7 +53,6 @@ const DishesList = () => {
     const handleUpdateModal = (dish) => {
         setSelectedDish(dish);
         setShowUpdateModal(true);
-        setDishes([...dishes]);
     };
 
     const handleCreateDish = async () => {
@@ -63,6 +62,7 @@ const DishesList = () => {
                 price: newDishPrice,
                 vat: newDishVat,
                 dishDescription: newDishDescription,
+                categoryDish: newDishCategory
             });
             setDishes([...dishes, response.data]);
             setShowCreateModal(false);
@@ -80,6 +80,13 @@ const DishesList = () => {
     if (loading) {
         return <p>Loading...</p>;
     }
+
+    // Agrupar platos por categoría
+    const groupedDishes = dishes.reduce((acc, dish) => {
+        acc[dish.categoryDish.categoryName] = acc[dish.categoryDish.categoryName] || [];
+        acc[dish.categoryDish.categoryName].push(dish);
+        return acc;
+    }, {});
 
     return (
         <div>
@@ -117,8 +124,13 @@ const DishesList = () => {
                                 value={newDishDescription}
                                 onChange={(e) => setNewDishDescription(e.target.value)}
                             /><br /><br />
-
-                            <br /><br />
+                            <label htmlFor="create-categoryDish">Categoría:</label>
+                            <input
+                                type="text"
+                                id="create-categoryDish"
+                                value={newDishCategory}
+                                onChange={(e) => setNewDishCategory(e.target.value)}
+                            /><br /><br />
                             <button type="button" onClick={handleCreateDish}>Crear</button>
                         </form>
                     </div>
@@ -145,12 +157,12 @@ const DishesList = () => {
                                 value={selectedDish.price}
                                 onChange={(e) => setSelectedDish({ ...selectedDish, price: e.target.value })}
                             /><br /><br />
-                            <label htmlFor="create-vat">Impuestos:</label>
+                            <label htmlFor="update-vat">Impuestos:</label>
                             <input
                                 type="number"
-                                id="create-vat"
+                                id="update-vat"
                                 value={selectedDish.vat}
-                                onChange={(e) => setNewDishVat(e.target.value)}
+                                onChange={(e) => setSelectedDish({ ...selectedDish, vat: e.target.value })}
                             /><br /><br />
                             <label htmlFor="update-description">Descripción: </label>
                             <input
@@ -167,27 +179,32 @@ const DishesList = () => {
 
             <div className="dishes-container">
                 <button className="button-create" onClick={() => setShowCreateModal(true)}>Crear plato</button><br />
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Precio</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {dishes.map(dish => (
-                            <tr key={dish.dishId}>
-                                <td>{dish.dishName}</td>
-                                <td>{dish.price}€</td>
-                                <td>
-                                    <button className="button-delete" onClick={() => removeDish(dish.dishId)}>🗑️</button>
-                                    <button className="button-edit" onClick={() => handleUpdateModal(dish)}>✏️</button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                {Object.keys(groupedDishes).map(category => (
+                    <div className="dishes-container" key={category}>
+                        <h3>{category}</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Precio</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {groupedDishes[category].map(dish => (
+                                    <tr key={dish.dishId}>
+                                        <td>{dish.dishName}</td>
+                                        <td>{dish.price}€</td>
+                                        <td> 
+                                            <button className="button-delete" onClick={() => removeDish(dish.dishId)}>🗑️</button>
+                                            <button className="button-edit" onClick={() => handleUpdateModal(dish)}>✏️</button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                ))}
             </div>
         </div>
     );
