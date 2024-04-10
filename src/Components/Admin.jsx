@@ -1,8 +1,8 @@
 import React from 'react';
-import StaffList from './StaffList';
-import DishesList from './DishesList';
-import OrdersList from './OrdersList';
-import './Style/Style.css'
+import StaffList from './List/StaffList';
+import DishesList from './List/DishesList';
+import OrdersList from './List/OrdersList';
+import './List/Style.css'
 
 function Admin() {
   return (
