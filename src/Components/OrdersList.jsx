@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-
 const OrdersList = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(false);

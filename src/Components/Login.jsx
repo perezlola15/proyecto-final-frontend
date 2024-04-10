@@ -42,9 +42,6 @@ function Login({ onLogin }) {
 export default Login; */
 
 import React, { useState } from 'react';
-import './Login.css'
-import 'mdb-react-ui-kit/dist/css/mdb.min.css';
-import { MDBBtn, MDBContainer, MDBCard, MDBCardBody, MDBCardImage, MDBRow, MDBCol, MDBIcon, MDBInput } from 'mdb-react-ui-kit';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -66,8 +63,10 @@ const Login = () => {
         },
         body: JSON.stringify(credentials)
       });
+      console.log("11111111");
 
       if (response.ok) {
+        console.log("2222222222");
         const data = await response.json();
         const token = data.token;
 
@@ -87,35 +86,32 @@ const Login = () => {
   };
 
   return (
-    <MDBContainer className="my-5">
-      <MDBCard>
-        <MDBRow className='g-0'>
-          <MDBCol md='6'>
-            <MDBCardImage src='img/login.png' alt="login form" className='rounded-start w-100' />
-          </MDBCol>
-          <MDBCol md='6'>
-            <MDBCardBody className='d-flex flex-column' style={{ marginLeft: '4%' }}>
-              <div className='d-flex flex-row mt-2'>
-                <MDBIcon fas icon="cubes fa-3x me-3" />
-                <img src='img/logo.png'></img>
-              </div>
-              <h5 className="fw-normal my-4 pb-3" style={{ letterSpacing: '1px' }}>Sign into your account</h5>
-              <form onSubmit={handleSubmit}>
-                <MDBInput wrapperClass='mb-4' label='Username' id='formControlLg' type='text' size="lg" value={username} onChange={(e) => setUsername(e.target.value)} />
-                <MDBInput wrapperClass='mb-4' label='Password' id='formControlLg' type='password' size="lg" value={password} onChange={(e) => setPassword(e.target.value)} />
-                <MDBBtn className="mb-4 px-5 custom-btn-width" color='dark' size='lg' type="submit">Login</MDBBtn>
-              </form>
-              <a className="small text-muted" href="#!">Forgot password?</a><br /><br />
-              <div className='d-flex flex-row justify-content-start'>
-                <a href="#!" className="small text-muted me-1">Terms of use.</a>
-                <a href="#!" className="small text-muted">Privacy policy</a>
-              </div>
-            </MDBCardBody>
-          </MDBCol>
-        </MDBRow>
-      </MDBCard>
-    </MDBContainer>
+    <div>
+      <h2>Login</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="username">Username:</label>
+          <input
+            type="text"
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </div>
+        <div>
+          <label htmlFor="password">Password:</label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <button type="submit">Login</button>
+      </form>
+    </div>
   );
 };
 
 export default Login;
+
