@@ -203,3 +203,15 @@
   font-size: 90%;
 }
 
+img {
+  width: 35%;
+  height: auto;
+}
+
+.custom-input-width input {
+  width: 300px; 
+}
+
+.custom-btn-width {
+  width: 200px; 
+}
