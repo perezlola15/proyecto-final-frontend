@@ -13,13 +13,14 @@ function Admin() {
       </div>
       <div className="admin-panel-container">
         <div className="left-panel">
-          <h2>Usuarios</h2>
+          <h2 className='admin-title'>Usuarios</h2>
           <StaffList />
-          <br /><h2>Pedidos</h2>
+          <br />
+          <h2 className='admin-title'>Pedidos</h2>
           <OrdersList />
         </div>
         <div className="right-panel">
-          <h2>Platos</h2>
+          <h2 className='admin-title'>Platos</h2>
           <DishesList />
         </div>
       </div>
