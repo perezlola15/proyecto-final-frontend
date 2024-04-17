@@ -1,8 +1,8 @@
 // Login.js
 import React, { useState } from 'react';
-import './style/Style.css';
+import '../style/Style.css';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
-import { useAuth } from './auth/AuthProvider'; 
+import { useAuth } from '../auth/AuthProvider'; 
 import { MDBBtn, MDBContainer, MDBCard, MDBCardBody, MDBCardImage, MDBRow, MDBCol, MDBIcon, MDBInput } from 'mdb-react-ui-kit';
 
 const Login = () => {
