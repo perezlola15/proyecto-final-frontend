@@ -22,7 +22,7 @@ function App() {
         <Route path="/lounge" element={<Lounge />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/addStaff" element={<AddStaff />} />
-        <Route path="/updateStaff" element={<UpdateStaff />} />
+        <Route path="/updateStaff/:id" element={<UpdateStaff />} />
         <Route path="/addDish" element={<AddDish />} />
         <Route path="/updateDish" element={<UpdateDish />} />
         <Route path="/addOrder" element={<AddOrder />} />
