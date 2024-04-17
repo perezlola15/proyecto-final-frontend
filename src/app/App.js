@@ -1,10 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from './Components/Login';
-import Kitchen from './Components/Kitchen';
-import Lounge from './Components/Lounge';
-import Admin from './Components/Admin';
-import Options from './Components/Options';
+import Kitchen from '../components/Kitchen';
+import Lounge from '../components/Lounge';
+import Admin from '../components/Admin';
+import Options from '../components/Options';
+import Login from '../auth/Login';
 
 function App() {
   return (

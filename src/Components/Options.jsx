@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Style/Style.css';
+import './style/Style.css';
 
 function Options() {
     return (

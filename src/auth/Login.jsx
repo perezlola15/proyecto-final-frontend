@@ -1,52 +1,12 @@
-/*import React, { useState } from 'react';
-
-function Login({ onLogin }) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Tengo que hacer toda la logica para validar el usuario con el back
-    onLogin(username);
-  };
-
-  return (
-    <div>
-      <h1>Gestión de un bar</h1>
-      <h2>Iniciar sesión</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Usuario: </label>
-          <input 
-            type="text" 
-            value={username} 
-            onChange={(e) => setUsername(e.target.value)} 
-            required 
-          />
-        </div>
-        <div>
-          <label>Contraseña: </label>
-          <input 
-            type="password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-            required 
-          />
-        </div>
-        <button type="submit">Entrar</button>
-      </form>
-    </div>
-  );
-}
-
-export default Login; */
-
+// Login.js
 import React, { useState } from 'react';
-import './Style/Style.css'
+import './style/Style.css';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
+import { useAuth } from './auth/AuthProvider'; 
 import { MDBBtn, MDBContainer, MDBCard, MDBCardBody, MDBCardImage, MDBRow, MDBCol, MDBIcon, MDBInput } from 'mdb-react-ui-kit';
 
 const Login = () => {
+  const { setToken } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -70,12 +30,15 @@ const Login = () => {
       if (response.ok) {
         const data = await response.json();
         const token = data.token;
+        const userRole = data.role; // Supongamos que recibes el rol del usuario desde el servidor
 
-        // Almacena el token en el almacenamiento local o de sesión
-        localStorage.setItem('token', token);
+        setToken(token);
 
-        // Redirige a otra página o actualiza la interfaz de usuario
-        window.location.href = '/admin';
+        // Determinar la ruta de redirección basada en el rol del usuario
+        const redirectPath = userRole === 'ADMIN' ? '/admin' : '/options';
+
+        // Redirigir al usuario a la ruta correspondiente
+        window.location.href = redirectPath;
       } else {
         // Si las credenciales son incorrectas o hay algún otro error,
         // maneja la respuesta del backend en consecuencia
@@ -97,13 +60,13 @@ const Login = () => {
             <MDBCardBody className='d-flex flex-column' style={{ marginLeft: '4%' }}>
               <div className='d-flex flex-row mt-2'>
                 <MDBIcon fas icon="cubes fa-3x me-3" />
-                <img src='img/logo.png'></img>
+                <img src='img/logo.png' alt="logo"></img>
               </div>
               <h5 className="fw-normal my-4 pb-3" style={{ letterSpacing: '1px' }}>Sign into your account</h5>
               <form onSubmit={handleSubmit}>
                 <MDBInput wrapperClass='mb-4' label='Username' id='formControlLg' type='text' size="lg" value={username} onChange={(e) => setUsername(e.target.value)} />
                 <MDBInput wrapperClass='mb-4' label='Password' id='formControlLg' type='password' size="lg" value={password} onChange={(e) => setPassword(e.target.value)} />
-                <MDBBtn className="mb-4 px-5 custom-btn-width" color='dark' size='lg' type="submit">Login</MDBBtn>
+                <MDBBtn className="mb-4 px-5 custom-btn-width" color='dark' size='lg' type="submit" onClick={handleSubmit}>Login</MDBBtn>
               </form>
               <a className="small text-muted" href="#!">Forgot password?</a><br /><br />
               <div className='d-flex flex-row justify-content-start'>

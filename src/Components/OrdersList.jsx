@@ -54,8 +54,10 @@ const OrdersList = () => {
 
     const handleUpdateModal = (order) => {
         setSelectedOrder(order);
+        console.log("Mostrando modal de actualización...");
         setShowUpdateModal(true);
     };
+    
 
     const handleCreateOrder = async () => {
         try {

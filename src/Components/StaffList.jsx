@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './Style/Style.css'
+import './style/Style.css';
 
 const StaffList = () => {
   const [staffs, setStaffs] = useState([]);
@@ -31,7 +31,7 @@ const StaffList = () => {
 
   const remove = async (id) => {
     try {
-      await axios.delete('http://localhost:8082/project/api/staffs/${id}');
+      await axios.delete(`http://localhost:8082/project/api/staffs/${id}`);
       let updatedStaffs = staffs.filter(staff => staff.staffId !== id);
       setStaffs(updatedStaffs);
     } catch (error) {
@@ -41,7 +41,7 @@ const StaffList = () => {
 
   const update = async (id, newStaff) => {
     try {
-      await axios.put('http://localhost:8082/project/api/staffs/${id}', newStaff);
+      await axios.put(`http://localhost:8082/project/api/staffs/${id}`, newStaff);
       setUpdatedStaff(newStaff);
       setSelectedStaff(null); // Limpiamos el usuario seleccionado
       setShowUpdateModal(false); // Cerramos el modal después de actualizar
