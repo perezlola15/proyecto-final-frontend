@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
 import { MDBContainer, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBIcon } from 'mdb-react-ui-kit';
-import '../../style/Style.css';
 
 const UpdateStaff = () => {
   const [staff, setStaff] = useState({});
@@ -34,7 +33,6 @@ const UpdateStaff = () => {
     <div>
       <div className="navbar">
         <img src="/img/logo.png" alt="Logo" />
-        <h1>PANEL DE ADMINISTRACIÓN</h1>
       </div>
       <MDBContainer className="d-flex justify-content-center align-items-center vh-100">
         <MDBCard style={{ width: '500px' }}>

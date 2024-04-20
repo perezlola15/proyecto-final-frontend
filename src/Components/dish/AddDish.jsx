@@ -45,7 +45,6 @@ function AddDish() {
     <div>
       <div className="navbar">
         <img src="/img/logo.png" alt="Logo" />
-        <h1>PANEL DE ADMINISTRACIÓN</h1>
       </div>
       <MDBContainer className="d-flex justify-content-center align-items-center vh-100">
         <MDBCard style={{ width: '500px' }}>
