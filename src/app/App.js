@@ -24,9 +24,9 @@ function App() {
         <Route path="/addStaff" element={<AddStaff />} />
         <Route path="/updateStaff/:id" element={<UpdateStaff />} />
         <Route path="/addDish" element={<AddDish />} />
-        <Route path="/updateDish" element={<UpdateDish />} />
+        <Route path="/updateDish/:id" element={<UpdateDish />} />
         <Route path="/addOrder" element={<AddOrder />} />
-        <Route path="/updateOrder" element={<UpdateOrder />} />
+        <Route path="/updateOrder/:id" element={<UpdateOrder />} />
       </Routes>
     </Router>
   );
