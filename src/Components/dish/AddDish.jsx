@@ -9,37 +9,44 @@ function AddDish() {
   const [vat, setVat] = useState('');
   const [dishDescription, setDishDescription] = useState('');
   const [categoryId, setCategoryId] = useState('');
-  const [categories, setCategories] = useState([]);
-  
+  const [categories, setCategories] = useState([]); 
 
   useEffect(() => {
     const fetchCategories = async () => {
         try {
             const response = await axios.get('http://localhost:8082/project/api/categories');
-            setCategories(response.data);
+            setCategories(response.data); // Asignar datos a categories
+            console.log('Categorías cargadas:', response.data);
         } catch (error) {
             console.error('Error fetching categories:', error);
         }
     };
-
+  
     fetchCategories();
-}, []);
-
+  }, []);
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Crear el objeto categoryDish con categoryId y categoryName
+      const categoryDish = {
+        categoryId,
+        categoryName: categories.find(category => category.categoryId === parseInt(categoryId)).categoryName
+      };
+  
+      // Enviar el plato con categoryDish como un objeto
       await axios.post('http://localhost:8082/project/api/dishes', {
         dishName,
         price,
         vat,
         dishDescription,
-        categoryId
+        categoryDish // Enviar categoryDish como un objeto
       });
     } catch (error) {
       console.error('Error creating dish:', error);
     }
-  };
+  };  
 
   return (
     <div>
@@ -59,8 +66,13 @@ function AddDish() {
               <MDBInput wrapperClass='mb-4' label='IVA' id='vat' type='number' size="lg" value={vat} onChange={(e) => setVat(e.target.value)} />
               <MDBInput wrapperClass='mb-4' label='Descripción del plato' id='dishDescription' type='text' size="lg" value={dishDescription} onChange={(e) => setDishDescription(e.target.value)} />
               <div className="mb-4">
-                <select id="categoryId" className="form-select" value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
-                  <option value="">Categoría</option>
+                <select 
+                  id="categoryId" 
+                  className="form-select" 
+                  value={categoryId} 
+                  onChange={(e) => setCategoryId(parseInt(e.target.value))}
+                >
+                  <option value="0">Categoría</option> {/* Valor predeterminado válido */}
                   {categories.map(category => (
                     <option key={category.categoryId} value={category.categoryId}>{category.categoryName}</option>
                   ))}
