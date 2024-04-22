@@ -7,7 +7,6 @@ function Options() {
         <div>
             <div className="navbar">
                 <img src="/img/logo.png" alt="Logo" />
-                <h1>PANEL DE ADMINISTRACIÓN</h1>
             </div>
             <div className="options-container">
                 <div className="options-lounge">

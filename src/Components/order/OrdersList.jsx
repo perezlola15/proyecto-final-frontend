@@ -70,7 +70,7 @@ const OrdersList = () => {
                                 <td>{order.orderTable}</td>
                                 <td>{order.staff.staffId}</td>
                                 <td>
-                                <Link to="/updateOrder" className="button-edit">✏️</Link>
+                                <Link to={`/updateOrder/${order.dishId}`} className="button-edit">✏️</Link>
                                     <button className="button-delete" onClick={() => handleDeleteClick(order.orderId)}>🗑️</button>
                                 </td>
                             </tr>

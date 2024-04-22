@@ -9,7 +9,6 @@ function Admin() {
     <div>
       <div className="navbar">
         <img src="/img/logo.png" alt="Logo" />
-        <h1>PANEL DE ADMINISTRACIÓN</h1>
       </div>
       <div className="admin-panel-container">
         <div className="left-panel">
