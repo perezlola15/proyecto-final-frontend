@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import { MDBBtn, MDBContainer, MDBCard, MDBCardBody, MDBCardImage, MDBRow, MDBCol, MDBIcon, MDBInput } from 'mdb-react-ui-kit';
 import { useNavigate } from "react-router-dom";
+import { useAuth } from './AuthProvider';
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const {setToken} = useAuth();
+
   const navigate = useNavigate(); 
 
   const handleSubmit = async (event) => {
@@ -17,20 +20,30 @@ function Login() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ username, password })
-      }).then(response => response.json());
-      
-      if (response.token) {
-        localStorage.setItem('token', response.token);
-        // Redirigir al usuario a la página protegida después de un inicio de sesión exitoso
-        navigate('/admin');
+      });
+      const token = response.headers.get('Authorization');
+
+      if (response.ok) {
+        if (token) {
+          setToken(token);
+
+          // Verificar el nombre de usuario 
+          if (username.includes("admin")) {
+            navigate('/admin');
+          } else {
+            navigate("/options");
+          }          
+        } else {
+          console.error('Error: No se recibió un token en la respuesta.');
+        }
       } else {
-        console.error("Usuario o contraseña incorrecto");
+        console.error('Error en la solicitud:', response.status);
       }
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
     }
   };
-
+  
   return (
     <MDBContainer className="my-5">
       <MDBCard>

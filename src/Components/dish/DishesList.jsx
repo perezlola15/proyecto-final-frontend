@@ -2,13 +2,17 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../../style/Style.css';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../auth/AuthProvider';
 
 const DishesList = () => {
     const [dishes, setDishes] = useState([]);
     const [loading, setLoading] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
+    const {token} = useAuth()
 
     useEffect(() => {
+        if(!token) return
+        console.log(token)
         setLoading(true);
 
         const fetchDishesList = async () => {
@@ -23,7 +27,7 @@ const DishesList = () => {
         };
 
         fetchDishesList();
-    }, []);
+    }, [token]);
 
     const handleDeleteClick = (id) => {
         setDeleteId(id);

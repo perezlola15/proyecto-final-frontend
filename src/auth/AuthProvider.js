@@ -5,14 +5,13 @@ import axios from 'axios';
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-  const [token, setToken_] = useState(localStorage.getItem('token'));
-
-  const setToken = (newToken) => {
-    setToken_(newToken);
-  };
-
+  const [token, setToken] = useState(localStorage.getItem('token'));
+  if (token) {
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+  }
   useEffect(() => {
     if (token) {
+      console.log("token encontrado")
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
       localStorage.setItem('token', token);
     } else {
