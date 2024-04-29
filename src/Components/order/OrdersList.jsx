@@ -58,7 +58,7 @@ const OrdersList = () => {
                             <th>ID</th>
                             <th>Estado</th>
                             <th>Mesa</th>
-                            <th>Staff</th>
+                            
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -68,7 +68,7 @@ const OrdersList = () => {
                                 <td>{order.orderId}</td>
                                 <td>{orderStatusMap[order.orderStatus]}</td>
                                 <td>{order.orderTable}</td>
-                                <td>{order.staff.staffId}</td>
+                                
                                 <td>
                                 <Link to={`/updateOrder/${order.dishId}`} className="button-edit">✏️</Link>
                                     <button className="button-delete" onClick={() => handleDeleteClick(order.orderId)}>🗑️</button>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './AddOrder.css';
+import { Link } from 'react-router-dom';
 
 const DishesList = () => {
     const [dishes, setDishes] = useState([]);
@@ -129,28 +129,28 @@ const DishesList = () => {
                 {Object.keys(groupedDishes).map(category => (
                     <div className="category-container" key={category}>
                         <h3>{category}</h3>
-                        <table key={category}>
+                        <table key={category} className="custom-table">
                             <thead>
                                 <tr>
-                                    <th>Nombre</th>
-                                    <th>Precio</th>
-                                    <th>Añadir</th>
-                                    <th>Notas</th>
+                                    <th className="custom-th">Nombre</th>
+                                    <th className="custom-th">Precio</th>
+                                    <th className="custom-th">Añadir</th>
+                                    <th className="custom-th">Notas</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {groupedDishes[category].map(dish => (
                                     <tr key={dish.dishId}>
-                                        <td>{dish.dishName}</td>
-                                        <td>{dish.price}€</td>
-                                        <td>
+                                        <td className="custom-td">{dish.dishName}</td>
+                                        <td className="custom-td">{dish.price}€</td>
+                                        <td className="custom-td">
                                             <div className="quantity-container">
                                                 <button className="button-add" onClick={() => handleAddClick(dish.dishId)}>➕</button>
                                                 <button className="button-remove" onClick={() => handleRemoveClick(dish.dishId)}>➖</button>
                                                 <span>{dish.quantity}</span>
                                             </div>
                                         </td>
-                                        <td><input type="text" placeholder="Añadir notas" /></td>
+                                        <td className="custom-td"><input type="text" placeholder="Añadir notas" /></td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -159,8 +159,9 @@ const DishesList = () => {
                 ))}
             </div>
             <button className='add-order' onClick={handleCreateOrder}>Crear Pedido</button>
+            <button className='add-order'><Link to="/admin">Volver atrás</Link></button>
         </div>
-    );
+    );    
 };
 
 export default DishesList;
