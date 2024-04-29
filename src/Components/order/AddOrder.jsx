@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import '../../style/Style.css';
+import './AddOrder.css';
 
 const DishesList = () => {
     const [dishes, setDishes] = useState([]);
@@ -68,16 +68,33 @@ const DishesList = () => {
             orderTable: selectedTable,
             staffId: selectedStaffId
         };
-
+    
         try {
+            // Crear el pedido
             const response = await axios.post('http://localhost:8082/project/api/orders', orderData);
             console.log('Order created:', response.data);
-            // Aquí podrías manejar alguna lógica adicional después de crear el pedido
+            
+            // Obtener el ID del pedido recién creado
+            const orderId = response.data.orderId;
+            
+            // Preparar los datos para los productos en la línea de pedido
+            const orderLineData = dishes.map(dish => ({
+                quantity: dish.quantity,
+                note: "", // Puedes agregar aquí la lógica para obtener las notas de cada plato
+                dish_id: dish.dishId,
+                order_id: orderId
+            }));
+    
+            // Insertar los productos en la tabla order_line
+            await axios.post('http://localhost:8082/project/api/order-line', orderLineData);
+            console.log('Order lines created successfully');
+    
+            // Aquí podrías manejar alguna lógica adicional después de crear el pedido y las líneas de pedido
         } catch (error) {
             console.error('Error creating order:', error);
         }
     };
-
+    
     if (loading) {
         return <p>Loading...</p>;
     }
