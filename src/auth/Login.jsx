@@ -5,34 +5,44 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from './AuthProvider';
 
 function Login() {
+  // Define los estados del nombre de usuario y la contrasena
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const {setToken} = useAuth();
 
-  const navigate = useNavigate(); 
+  // Obtiene la funcion setToken del contexto de autenticacion
+  const { setToken } = useAuth();
 
+  const navigate = useNavigate();
+
+  // Funcion para manejar el envio del formulario de inicio de sesion
   const handleSubmit = async (event) => {
-    event.preventDefault();
+    event.preventDefault(); // Evita que el formulario se envie y recargue la pagina
+
     try {
+      // Realiza una solicitud POST para iniciar sesion
       const response = await fetch('http://localhost:8082/project/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
+        // Envia el nombre de usuario y la contrasena en formato JSON
         body: JSON.stringify({ username, password })
       });
+
+      // Obtiene el token de autenticacion del encabezado de la respuesta
       const token = response.headers.get('Authorization');
 
       if (response.ok) {
         if (token) {
+          // Almacena el token de autenticacion
           setToken(token);
 
-          // Verificar el nombre de usuario 
+          // Verifica el nombre de usuario y lo redirgire a una ruta determinada
           if (username.includes("admin")) {
-            navigate('/admin');
+            navigate('/admin'); // Si el nombre de usuario contiene "admin", redirige a la ruta '/admin'
           } else {
-            navigate("/options");
-          }          
+            navigate("/options"); // De lo contrario, redirige a la ruta '/options'
+          }
         } else {
           console.error('Error: No se recibió un token en la respuesta.');
         }
@@ -43,7 +53,7 @@ function Login() {
       console.error('Error al iniciar sesión:', error);
     }
   };
-  
+
   return (
     <MDBContainer className="my-5">
       <MDBCard>
@@ -57,16 +67,16 @@ function Login() {
                 <MDBIcon fas icon="cubes fa-3x me-3" />
                 <img src='img/logo.png' alt="logo"></img>
               </div>
-              <h5 className="fw-normal my-4 pb-3" style={{ letterSpacing: '1px' }}>Sign into your account</h5>
+              <h5 className="fw-normal my-4 pb-3" style={{ letterSpacing: '1px' }}>Inicia sesión en su cuenta</h5>
               <form onSubmit={handleSubmit}>
-                <MDBInput wrapperClass='mb-4' label='Username' id='formControlLg' type='text' size="lg" value={username} onChange={(e) => setUsername(e.target.value)} required />
-                <MDBInput wrapperClass='mb-4' label='Password' id='formControlLg' type='password' size="lg" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                <MDBBtn className="mb-4 px-5 custom-btn-width" color='dark' size='lg' type="submit" onClick={handleSubmit}>Login</MDBBtn>
+                <MDBInput wrapperClass='mb-4' label='Usuario' id='formControlLg' type='text' size="lg" value={username} onChange={(e) => setUsername(e.target.value)} required />
+                <MDBInput wrapperClass='mb-4' label='Contraseña' id='formControlLg' type='password' size="lg" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                <MDBBtn className="mb-4 px-5 custom-btn-width" color='dark' size='lg' type="submit" onClick={handleSubmit}>Inicia sesión</MDBBtn>
               </form>
-              <a className="small text-muted" href="#!">Forgot password?</a><br /><br />
+              <a className="small text-muted" href="/forgotpass">¿Ha olvidado su contraseña?</a><br /><br />
               <div className='d-flex flex-row justify-content-start'>
-                <a href="#!" className="small text-muted me-1">Terms of use.</a>
-                <a href="#!" className="small text-muted">Privacy policy</a>
+                <a href="terms" className="small text-muted me-1">Términos de uso.</a>
+                <a href="privacy" className="small text-muted">Política de privacidad.</a>
               </div>
             </MDBCardBody>
           </MDBCol>

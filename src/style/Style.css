@@ -308,3 +308,33 @@ img {
   margin-bottom: 2%;
   margin-left: 2%;
 }
+
+/* Not found */
+.not-found-container {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.not-found-container h1 {
+  font-size: 24px;
+  color: #ff0000;
+}
+
+.not-found-container p {
+  font-size: 18px;
+}
+
+/* Logout */
+.mainSpinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #18181b;
+  color: #dcdcdc;
+  height: 100vh;
+}
+
+.spinner-grow {
+  width: 5rem; 
+  height: 5rem; 
+}
