@@ -1,11 +1,10 @@
-import React from 'react'
+import React from 'react';
+import Navbar from '../navbar/Navbar';
 
 function kitchen() {
   return (
     <div>
-      <div className="navbar">
-                <img src="/img/logo.png" alt="Logo" />
-            </div>
+      <Navbar />
       <h2>Pantalla de Cocina</h2>
     </div>
   );

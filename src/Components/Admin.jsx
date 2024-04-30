@@ -3,13 +3,12 @@ import StaffList from './staff/StaffList';
 import DishesList from './dish//DishesList';
 import OrdersList from './order/OrdersList';
 import '../style/Style.css';
+import Navbar from '../navbar/Navbar';
 
 function Admin() {
   return (
     <div>
-      <div className="navbar">
-        <img src="/img/logo.png" alt="Logo" />
-      </div>
+      <Navbar />
       <div className="admin-panel-container">
         <div className="left-panel">
           <h2 className='admin-title'>Usuarios</h2>

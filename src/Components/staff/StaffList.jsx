@@ -60,8 +60,12 @@ const StaffList = () => {
               <tr key={staff.staffId}>
                 <td>{staff.username}</td>
                 <td>
-                <Link to={`/updateStaff/${staff.staffId}`} className="button-edit">✏️</Link>
-                  <button className="button-delete" onClick={() => handleDeleteClick(staff.staffId)}>🗑️</button>
+                  {staff.username !== "admin" && (
+                    <>
+                      <Link to={`/updateStaff/${staff.staffId}`} className="button-edit">✏️</Link>
+                      <button className="button-delete" onClick={() => handleDeleteClick(staff.staffId)}>🗑️</button>
+                    </>
+                  )}
                 </td>
               </tr>
             ))}

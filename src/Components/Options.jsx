@@ -1,13 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../style/Style.css';
+import Navbar from '../navbar/Navbar';
 
 function Options() {
     return (
         <div>
-            <div className="navbar">
-                <img src="/img/logo.png" alt="Logo" />
-            </div>
+            <Navbar />
             <div className="options-container">
                 <div className="options-lounge">
                     <Link to="/lounge">
