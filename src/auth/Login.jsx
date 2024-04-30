@@ -37,7 +37,8 @@ function Login() {
           // Almacena el token de autenticacion
           setToken(token);
 
-if (username.includes("admin")) {
+          // Verifica el nombre de usuario y lo redirgire a una ruta determinada
+          if (username.includes("admin")) {
             navigate('/admin'); // Si el nombre de usuario contiene "admin", redirige a la ruta '/admin'
           } else {
             navigate("/options"); // De lo contrario, redirige a la ruta '/options'
@@ -72,6 +73,10 @@ if (username.includes("admin")) {
                 <MDBInput wrapperClass='mb-4' label='Contraseña' id='formControlLg' type='password' size="lg" value={password} onChange={(e) => setPassword(e.target.value)} required />
                 <MDBBtn className="mb-4 px-5 custom-btn-width" color='dark' size='lg' type="submit" onClick={handleSubmit}>Inicia sesión</MDBBtn>
               </form>
+              <a className="small text-muted" href="/forgotpass">¿Ha olvidado su contraseña?</a><br /><br />
+              <div className='d-flex flex-row justify-content-start'>
+                <a href="terms" className="small text-muted me-1">Términos de uso.</a>
+                <a href="privacy" className="small text-muted">Política de privacidad.</a>
               </div>
             </MDBCardBody>
           </MDBCol>
