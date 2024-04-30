@@ -308,3 +308,18 @@ img {
   margin-bottom: 2%;
   margin-left: 2%;
 }
+
+/* NOT FOUND */
+.not-found-container {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.not-found-container h1 {
+  font-size: 24px;
+  color: #ff0000;
+}
+
+.not-found-container p {
+  font-size: 18px;
+}

@@ -27,7 +27,7 @@ function Login() {
         if (token) {
           setToken(token);
 
-          // Verificar el nombre de usuario 
+          // Verificar el nombre de usuario y redirgirirlo a una ruta determinada
           if (username.includes("admin")) {
             navigate('/admin');
           } else {
@@ -57,16 +57,16 @@ function Login() {
                 <MDBIcon fas icon="cubes fa-3x me-3" />
                 <img src='img/logo.png' alt="logo"></img>
               </div>
-              <h5 className="fw-normal my-4 pb-3" style={{ letterSpacing: '1px' }}>Sign into your account</h5>
+              <h5 className="fw-normal my-4 pb-3" style={{ letterSpacing: '1px' }}>Inicia sesión en su cuenta</h5>
               <form onSubmit={handleSubmit}>
-                <MDBInput wrapperClass='mb-4' label='Username' id='formControlLg' type='text' size="lg" value={username} onChange={(e) => setUsername(e.target.value)} required />
-                <MDBInput wrapperClass='mb-4' label='Password' id='formControlLg' type='password' size="lg" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                <MDBBtn className="mb-4 px-5 custom-btn-width" color='dark' size='lg' type="submit" onClick={handleSubmit}>Login</MDBBtn>
+                <MDBInput wrapperClass='mb-4' label='Usuario' id='formControlLg' type='text' size="lg" value={username} onChange={(e) => setUsername(e.target.value)} required />
+                <MDBInput wrapperClass='mb-4' label='Contraseña' id='formControlLg' type='password' size="lg" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                <MDBBtn className="mb-4 px-5 custom-btn-width" color='dark' size='lg' type="submit" onClick={handleSubmit}>Inicia sesión</MDBBtn>
               </form>
-              <a className="small text-muted" href="#!">Forgot password?</a><br /><br />
+              <a className="small text-muted" href="#!">¿Ha olvidado su contraseña?</a><br /><br />
               <div className='d-flex flex-row justify-content-start'>
-                <a href="#!" className="small text-muted me-1">Terms of use.</a>
-                <a href="#!" className="small text-muted">Privacy policy</a>
+                <a href="#!" className="small text-muted me-1">Términos de uso.</a>
+                <a href="#!" className="small text-muted">Política de privacidad.</a>
               </div>
             </MDBCardBody>
           </MDBCol>
