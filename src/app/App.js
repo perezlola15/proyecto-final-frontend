@@ -1,10 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Kitchen from '../components/Kitchen';
-import Lounge from '../components/Lounge';
-import Admin from '../components/Admin';
-import Options from '../components/Options';
+import Kitchen from '../Components/Kitchen';
+import Lounge from '../Components/Lounge';
+import Admin from '../Components/Admin';
+import Options from '../Components/Options';
 import Login from '../auth/Login';
+<<<<<<< HEAD
 import UpdateStaff from '../components/staff/UpdateStaff';
 import AddStaff from '../components/staff/AddStaff';
 import UpdateDish from '../components/dish/UpdateDish';
@@ -20,6 +21,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
+<<<<<<< HEAD
         <Route path="*" element={<NotFound />} />
 
         <Route element={<ProtectedRoute />}>
