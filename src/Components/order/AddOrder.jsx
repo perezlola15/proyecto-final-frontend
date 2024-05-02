@@ -5,10 +5,9 @@ import { Link } from 'react-router-dom';
 const DishesList = () => {
     const [dishes, setDishes] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [staffOptions, setStaffOptions] = useState([]);
-    const [selectedStaffId, setSelectedStaffId] = useState('');
     const [selectedTable, setSelectedTable] = useState('');
     const [orderStatus, setOrderStatus] = useState(1); // Estado "EN PROCESO"
+    const [notes, setNotes] = useState({});
 
     useEffect(() => {
         setLoading(true);
@@ -26,18 +25,7 @@ const DishesList = () => {
 
         fetchDishesList();
 
-        // Fetch staff data
-        fetchStaffOptions();
     }, []);
-
-    const fetchStaffOptions = async () => {
-        try {
-            const response = await axios.get('http://localhost:8082/project/api/staff');
-            setStaffOptions(response.data);
-        } catch (error) {
-            console.error('Error fetching staff data:', error);
-        }
-    };
 
     const handleAddClick = (dishId) => {
         setDishes(prevDishes => {
@@ -61,40 +49,51 @@ const DishesList = () => {
         });
     };
 
+    const handleNoteChange = (dishId, value) => {
+        setNotes(prevNotes => ({
+            ...prevNotes,
+            [dishId]: value
+        }));
+    };
+
     const handleCreateOrder = async () => {
         const orderData = {
             orderDate: new Date(),
             orderStatus,
             orderTable: selectedTable,
-            staffId: selectedStaffId
+            staffId: 1
         };
-    
+
         try {
             // Crear el pedido
             const response = await axios.post('http://localhost:8082/project/api/orders', orderData);
             console.log('Order created:', response.data);
-            
+
             // Obtener el ID del pedido recién creado
             const orderId = response.data.orderId;
-            
-            // Preparar los datos para los productos en la línea de pedido
-            const orderLineData = dishes.map(dish => ({
-                quantity: dish.quantity,
-                note: "", // Puedes agregar aquí la lógica para obtener las notas de cada plato
-                dish_id: dish.dishId,
-                order_id: orderId
-            }));
-    
+
+            // Filtrar las líneas de pedido para enviar solo aquellas con cantidad mayor que cero
+            const orderLineData = dishes
+                .filter(dish => dish.quantity > 0)
+                .map(dish => ({
+                    quantity: dish.quantity,
+                    note: notes[dish.dishId] || "",
+                    dish_id: dish.dishId,
+                    order_id: orderId
+                }));
+
+            console.log('Order Line Data:', orderLineData);
+
             // Insertar los productos en la tabla order_line
-            await axios.post('http://localhost:8082/project/api/order-line', orderLineData);
+            await axios.post('http://localhost:8082/project/api/ordersLine', orderLineData);
             console.log('Order lines created successfully');
-    
+
             // Aquí podrías manejar alguna lógica adicional después de crear el pedido y las líneas de pedido
         } catch (error) {
             console.error('Error creating order:', error);
         }
     };
-    
+
     if (loading) {
         return <p>Loading...</p>;
     }
@@ -112,15 +111,6 @@ const DishesList = () => {
                 <img src="/img/logo.png" alt="Logo" />
             </div>
             <div className="dishes-container add">
-                <div className="staff-select-container">
-                    <p>Staff:</p>
-                    <select className='selected-staff' value={selectedStaffId} onChange={(e) => setSelectedStaffId(e.target.value)}>
-                        <option value="">Seleccionar Personal</option>
-                        {staffOptions.map(staff => (
-                            <option key={staff.staffId} value={staff.staffId}>{staff.username}</option>
-                        ))}
-                    </select>
-                </div>
                 <div className="table-select-container">
                     <p>Mesa:</p>
                     <input type="number" className='selected-table' value={selectedTable} onChange={(e) => setSelectedTable(e.target.value)} />
@@ -150,7 +140,10 @@ const DishesList = () => {
                                                 <span>{dish.quantity}</span>
                                             </div>
                                         </td>
-                                        <td className="custom-td"><input type="text" placeholder="Añadir notas" /></td>
+                                        <td className="custom-td">
+                                            <input type="text" placeholder="Añadir notas" value={notes[dish.dishId] || ""}
+                                                onChange={(e) => handleNoteChange(dish.dishId, e.target.value)} />
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -161,7 +154,7 @@ const DishesList = () => {
             <button className='add-order' onClick={handleCreateOrder}>Crear Pedido</button>
             <button className='add-order'><Link to="/admin">Volver atrás</Link></button>
         </div>
-    );    
+    );
 };
 
 export default DishesList;
