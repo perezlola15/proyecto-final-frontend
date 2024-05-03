@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { MDBContainer, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBIcon } from 'mdb-react-ui-kit';
 
 const UpdateDish = () => {
   const [dish, setDish] = useState({});
   const { id } = useParams();
-  
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDish = async () => {
@@ -24,6 +24,7 @@ const UpdateDish = () => {
     e.preventDefault();
     try {
       await axios.put(`http://localhost:8082/project/api/dishes/${id}`, dish);
+      navigate("/admin");
     } catch (error) {
       console.error('Error updating dish:', error);
     }
