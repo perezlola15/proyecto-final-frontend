@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
 import { MDBContainer, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBIcon } from 'mdb-react-ui-kit';
 
 function AddStaff() {
@@ -8,6 +8,7 @@ function AddStaff() {
   const [password, setPassword] = useState('');
   const [disabled, setDisabled] = useState(false);
   const [locked, setLocked] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,6 +20,7 @@ function AddStaff() {
         locked
       });
       console.log('Staff created:', response.data);
+      navigate("/admin");
     } catch (error) {
       console.error('Error creating staff:', error);
     }

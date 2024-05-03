@@ -87,7 +87,6 @@ const DishesList = () => {
             // Insertar los productos en la tabla order_line
             await axios.post('http://localhost:8082/project/api/ordersLine', orderLineData);
             console.log('Order lines created successfully');
-
             // Aquí podrías manejar alguna lógica adicional después de crear el pedido y las líneas de pedido
         } catch (error) {
             console.error('Error creating order:', error);

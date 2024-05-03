@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { MDBContainer, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBIcon } from 'mdb-react-ui-kit';
 
 function AddDish() {
@@ -9,13 +9,14 @@ function AddDish() {
   const [vat, setVat] = useState('');
   const [dishDescription, setDishDescription] = useState('');
   const [categoryId, setCategoryId] = useState('');
-  const [categories, setCategories] = useState([]); 
+  const [categories, setCategories] = useState([]);
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const fetchCategories = async () => {
         try {
             const response = await axios.get('http://localhost:8082/project/api/categories');
-            setCategories(response.data); // Asignar datos a categories
+            setCategories(response.data); 
             console.log('Categorías cargadas:', response.data);
         } catch (error) {
             console.error('Error fetching categories:', error);
@@ -41,8 +42,9 @@ function AddDish() {
         price,
         vat,
         dishDescription,
-        categoryDish // Enviar categoryDish como un objeto
+        categoryDish 
       });
+      navigate("/admin");
     } catch (error) {
       console.error('Error creating dish:', error);
     }

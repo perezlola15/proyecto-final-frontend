@@ -8,11 +8,10 @@ const DishesList = () => {
     const [dishes, setDishes] = useState([]);
     const [loading, setLoading] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
-    const {token} = useAuth()
+    const { token } = useAuth();
 
     useEffect(() => {
-        if(!token) return
-        console.log(token)
+        if (!token) return;
         setLoading(true);
 
         const fetchDishesList = async () => {
@@ -51,6 +50,11 @@ const DishesList = () => {
         return acc;
     }, {});
 
+    // Ordenar las categorías por ID
+    const sortedCategories = Object.entries(groupedDishes).sort((a, b) => {
+        return a[1][0].categoryDish.categoryId - b[1][0].categoryDish.categoryId;
+    });
+
     if (loading) {
         return <p>Loading...</p>;
     }
@@ -59,7 +63,7 @@ const DishesList = () => {
         <div>
             <div className="dishes-container">
                 <Link to="/addDish"><button className='button-create'>Crear plato</button></Link><br />
-                {Object.keys(groupedDishes).map(category => (
+                {sortedCategories.map(([category, categoryDishes]) => (
                     <div className="dishes-container" key={category}>
                         <h3>{category}</h3>
                         <table>
@@ -71,7 +75,7 @@ const DishesList = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {groupedDishes[category].map(dish => (
+                                {categoryDishes.map(dish => (
                                     <tr key={dish.dishId}>
                                         <td>{dish.dishName}</td>
                                         <td>{dish.price}€</td>
