@@ -6,7 +6,7 @@ const DishesList = () => {
     const [dishes, setDishes] = useState([]);
     const [loading, setLoading] = useState(false);
     const [selectedTable, setSelectedTable] = useState('');
-    const [orderStatus, setOrderStatus] = useState(1); // Estado "EN PROCESO"
+    const [orderStatus] = useState(1); // Estado "EN PROCESO"
     const [notes, setNotes] = useState({});
 
     useEffect(() => {
@@ -72,21 +72,25 @@ const DishesList = () => {
             // Obtener el ID del pedido recién creado
             const orderId = response.data.orderId;
 
-            // Filtrar las líneas de pedido para enviar solo aquellas con cantidad mayor que cero
-            const orderLineData = dishes
-                .filter(dish => dish.quantity > 0)
-                .map(dish => ({
-                    quantity: dish.quantity,
-                    note: notes[dish.dishId] || "",
-                    dish_id: dish.dishId,
-                    order_id: orderId
-                }));
+            // Enviar cada línea de pedido individualmente
+            for (const dish of dishes) {
+                if (dish.quantity > 0) {
+                    const orderLineData = {
+                        quantity: dish.quantity,
+                        note: notes[dish.dishId] || "",
+                        dishId: dish.dishId,
+                        orderId: orderId 
+                    };
+                    
+                    console.log('Order Line Data:', orderLineData);
 
-            console.log('Order Line Data:', orderLineData);
+                    // Insertar el producto en la tabla order_line
+                    await axios.post('http://localhost:8082/project/api/ordersLine', orderLineData);
+                    console.log('Order line created successfully');
+                }
+            }
 
-            // Insertar los productos en la tabla order_line
-            await axios.post('http://localhost:8082/project/api/ordersLine', orderLineData);
-            console.log('Order lines created successfully');
+            console.log('All order lines created successfully');
             // Aquí podrías manejar alguna lógica adicional después de crear el pedido y las líneas de pedido
         } catch (error) {
             console.error('Error creating order:', error);
@@ -104,6 +108,13 @@ const DishesList = () => {
         return acc;
     }, {});
 
+    // Obtener las claves de las categorías y ordenarlas por el ID de la categoría
+    const sortedCategories = Object.keys(groupedDishes).sort((a, b) => {
+        const categoryA = groupedDishes[a][0].categoryDish.categoryId;
+        const categoryB = groupedDishes[b][0].categoryDish.categoryId;
+        return categoryA - categoryB;
+    });
+
     return (
         <div>
             <div className="navbar">
@@ -115,7 +126,7 @@ const DishesList = () => {
                     <input type="number" className='selected-table' value={selectedTable} onChange={(e) => setSelectedTable(e.target.value)} />
                 </div>
                 <br />
-                {Object.keys(groupedDishes).map(category => (
+                {sortedCategories.map(category => (
                     <div className="category-container" key={category}>
                         <h3>{category}</h3>
                         <table key={category} className="custom-table">
@@ -150,8 +161,10 @@ const DishesList = () => {
                     </div>
                 ))}
             </div>
-            <button className='add-order' onClick={handleCreateOrder}>Crear Pedido</button>
-            <button className='add-order'><Link to="/admin">Volver atrás</Link></button>
+            <button className="mb-4 px-6 custom-btn-width btn btn-dark btn-lg" style={{ marginLeft: '1%' }} onClick={handleCreateOrder}>Crear Pedido</button>
+            <button className="mb-4 px-6 custom-btn-width btn btn-dark btn-lg" style={{ marginLeft: '1%' }}>
+                <Link to="/admin" style={{ color: 'white', textDecoration: 'none' }}>Volver atrás</Link>
+            </button>
         </div>
     );
 };
