@@ -9,22 +9,28 @@ const UpdateOrder = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Funcion para obtener los datos del pedido
     const fetchOrder = async () => {
       try {
+        // Se hace una solicitud GET a la api para obtener los datos del pedido con un id concreto
         const response = await axios.get(`http://localhost:8082/project/api/orders/${id}`);
         setOrder(response.data);
       } catch (error) {
         console.error('Error fetching order data:', error);
       }
     };
+    // Llamada a la funcion para obtener la lista de pedidos
     fetchOrder();
   }, [id]);
-  
+
+  // Funcion para manejar el envio del formulario de actualizacion del pedido
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Se realiza una solicitud PUT a la api para actualizar los datos del pedido con un id concreto
       await axios.put(`http://localhost:8082/project/api/orders/${id}`, order);
-      navigate("/admin");
+      // Si se actualiza correctamente el plato, se redirige al panel de admin
+      //navigate("/admin");
     } catch (error) {
       console.error('Error updating order:', error);
     }

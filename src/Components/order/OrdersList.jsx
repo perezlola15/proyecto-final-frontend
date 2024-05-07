@@ -15,6 +15,7 @@ const OrdersList = () => {
     useEffect(() => {
         setLoading(true);
 
+        // Funcion para obtener la lista de pedidos desde la api
         const fetchOrdersList = async () => {
             try {
                 const response = await axios.get('http://localhost:8082/project/api/orders');
@@ -25,17 +26,21 @@ const OrdersList = () => {
                 setLoading(false);
             }
         };
-
+        // Llamada a la funcion para obtener la lista de pedidos
         fetchOrdersList();
     }, []);
 
+    // Funcion para manejar el evento de eliminar un pedido
     const handleDeleteClick = (id) => {
         setDeleteId(id);
     };
 
+    // Funcion para manejar el evento de confirmar la eliminacion de un pedido
     const confirmDelete = async () => {
         try {
+            // Se realiza una solicitud DELETE a la api para eliminar el pedido con un id concreto
             await axios.delete(`http://localhost:8082/project/api/orders/${deleteId}`);
+            // Se filtran los pedido actualizados excluyendo el pedido eliminado
             let updatedOrders = orders.filter(order => order.orderId !== deleteId);
             setOrders(updatedOrders);
             setDeleteId(null);
@@ -51,14 +56,14 @@ const OrdersList = () => {
     return (
         <div>
             <div className="orders-container">
-            <Link to="/addOrder"><button className='button-create'>Crear pedido</button></Link><br />
+                <Link to="/addOrder"><button className='button-create'>Crear pedido</button></Link><br />
                 <table>
                     <thead>
                         <tr>
                             <th>ID</th>
                             <th>Estado</th>
                             <th>Mesa</th>
-                            
+
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -68,9 +73,9 @@ const OrdersList = () => {
                                 <td>{order.orderId}</td>
                                 <td>{orderStatusMap[order.orderStatus]}</td>
                                 <td>{order.orderTable}</td>
-                                
+
                                 <td>
-                                <Link to={`/updateOrder/${order.orderId}`} className="button-edit">✏️</Link>
+                                    <Link to={`/updateOrder/${order.orderId}`} className="button-edit">✏️</Link>
                                     <button className="button-delete" onClick={() => handleDeleteClick(order.orderId)}>🗑️</button>
                                 </td>
                             </tr>

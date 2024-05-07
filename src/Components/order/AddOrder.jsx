@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const DishesList = () => {
     const [dishes, setDishes] = useState([]);
@@ -8,13 +8,17 @@ const DishesList = () => {
     const [selectedTable, setSelectedTable] = useState('');
     const [orderStatus] = useState(1); // Estado "EN PROCESO"
     const [notes, setNotes] = useState({});
+    const navigate = useNavigate();
 
     useEffect(() => {
         setLoading(true);
 
+        // Funcion para obtener la lista de platos desde la api
         const fetchDishesList = async () => {
             try {
+                // Se hace una solicitud GET a la api para obtener la lista de platos
                 const response = await axios.get('http://localhost:8082/project/api/dishes');
+                // Se establece la lista de platos en el estado, con la cantidad inicializada en 0
                 setDishes(response.data.map(dish => ({ ...dish, quantity: 0 })));
                 setLoading(false);
             } catch (error) {
@@ -22,12 +26,13 @@ const DishesList = () => {
                 setLoading(false);
             }
         };
-
+        // Llamada a la funcion para obtener la lista de platos
         fetchDishesList();
-
     }, []);
 
+    // Funcion para manejar el evento de añadir un plato
     const handleAddClick = (dishId) => {
+         // Actualizacion del estado de los platos, incrementando la cantidad del plato seleccionado
         setDishes(prevDishes => {
             return prevDishes.map(dish => {
                 if (dish.dishId === dishId) {
@@ -38,6 +43,7 @@ const DishesList = () => {
         });
     };
 
+    // Funcion para manejar el evento de eliminar un plato
     const handleRemoveClick = (dishId) => {
         setDishes(prevDishes => {
             return prevDishes.map(dish => {
@@ -49,13 +55,16 @@ const DishesList = () => {
         });
     };
 
+     // Funcion para manejar las notas de un plato
     const handleNoteChange = (dishId, value) => {
+        // Actualizacion del estado de las notas de los platos
         setNotes(prevNotes => ({
             ...prevNotes,
             [dishId]: value
         }));
     };
 
+    // Funcion para crear un nuevo pedido
     const handleCreateOrder = async () => {
         const orderData = {
             orderDate: new Date(),
@@ -65,33 +74,31 @@ const DishesList = () => {
         };
 
         try {
-            // Crear el pedido
+            // Crea el pedido
             const response = await axios.post('http://localhost:8082/project/api/orders', orderData);
             console.log('Order created:', response.data);
-
-            // Obtener el ID del pedido recién creado
+            // Obtiene el id del pedido creado
             const orderId = response.data.orderId;
 
-            // Enviar cada línea de pedido individualmente
+            // Envia cada linea de pedido individualmente con sus datos
             for (const dish of dishes) {
                 if (dish.quantity > 0) {
                     const orderLineData = {
                         quantity: dish.quantity,
                         note: notes[dish.dishId] || "",
                         dishId: dish.dishId,
-                        orderId: orderId 
+                        orderId: orderId
                     };
-                    
-                    console.log('Order Line Data:', orderLineData);
+                    //console.log('Order Line Data:', orderLineData);
 
-                    // Insertar el producto en la tabla order_line
+                    // Inserta el producto en la tabla order_line
                     await axios.post('http://localhost:8082/project/api/ordersLine', orderLineData);
                     console.log('Order line created successfully');
                 }
             }
-
             console.log('All order lines created successfully');
-            // Aquí podrías manejar alguna lógica adicional después de crear el pedido y las líneas de pedido
+            // Si se actualiza correctamente el plato, se redirige al panel de admin
+            //navigate("/admin");
         } catch (error) {
             console.error('Error creating order:', error);
         }
@@ -101,14 +108,14 @@ const DishesList = () => {
         return <p>Loading...</p>;
     }
 
-    // Agrupar platos por categoría
+    // Agrupa platos por categoria
     const groupedDishes = dishes.reduce((acc, dish) => {
         acc[dish.categoryDish.categoryName] = acc[dish.categoryDish.categoryName] || [];
         acc[dish.categoryDish.categoryName].push(dish);
         return acc;
     }, {});
 
-    // Obtener las claves de las categorías y ordenarlas por el ID de la categoría
+    // Ordena las categorias por su id
     const sortedCategories = Object.keys(groupedDishes).sort((a, b) => {
         const categoryA = groupedDishes[a][0].categoryDish.categoryId;
         const categoryB = groupedDishes[b][0].categoryDish.categoryId;

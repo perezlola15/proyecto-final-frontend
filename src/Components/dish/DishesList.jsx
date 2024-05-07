@@ -10,31 +10,40 @@ const DishesList = () => {
     const [deleteId, setDeleteId] = useState(null);
     const { token } = useAuth();
 
+    // Efecto para cargar la lista de platos cuando reciba el token
     useEffect(() => {
         if (!token) return;
         setLoading(true);
 
+        // Funcion para obtener la lista de platos desde la api
         const fetchDishesList = async () => {
             try {
+                // Se hace una solicitud GET a la api para obtener la lista de platos
                 const response = await axios.get('http://localhost:8082/project/api/dishes');
+                // Se establece el estado de los platos con los datos obtenidos
                 setDishes(response.data);
+                // Se desactiva el estado de carga
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching data:', error);
                 setLoading(false);
             }
         };
-
+        // Llamada a la funcion para obtener la lista de platos
         fetchDishesList();
     }, [token]);
 
+    // Funcion para manejar el clic en el boton de eliminar un plato
     const handleDeleteClick = (id) => {
         setDeleteId(id);
     };
 
+    // Funcion para confirmar la eliminacion del plato
     const confirmDelete = async () => {
         try {
+            // Se realiza una solicitud DELETE a la api para eliminar el plato con un id concreto
             await axios.delete(`http://localhost:8082/project/api/dishes/${deleteId}`);
+            // Se filtran los platos actualizados excluyendo el plato eliminado
             let updatedDishes = dishes.filter(dish => dish.dishId !== deleteId);
             setDishes(updatedDishes);
             setDeleteId(null);
@@ -43,14 +52,14 @@ const DishesList = () => {
         }
     };
 
-    // Agrupar platos por categoría
+    // Agrupa platos por categoria
     const groupedDishes = dishes.reduce((acc, dish) => {
         acc[dish.categoryDish.categoryName] = acc[dish.categoryDish.categoryName] || [];
         acc[dish.categoryDish.categoryName].push(dish);
         return acc;
     }, {});
 
-    // Ordenar las categorías por ID
+    // Ordena las categorias por id
     const sortedCategories = Object.entries(groupedDishes).sort((a, b) => {
         return a[1][0].categoryDish.categoryId - b[1][0].categoryDish.categoryId;
     });

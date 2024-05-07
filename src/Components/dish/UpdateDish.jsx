@@ -5,25 +5,33 @@ import { MDBContainer, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBIcon } from 'm
 
 const UpdateDish = () => {
   const [dish, setDish] = useState({});
+  // Uso del hook useParams para obtener el id del plato de la url
   const { id } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Funcion para obtener los datos del plato
     const fetchDish = async () => {
       try {
+        // Se hace una solicitud GET a la api para obtener los datos del plato con un id concreto
         const response = await axios.get(`http://localhost:8082/project/api/dishes/${id}`);
+        // Se establecen los datos del plato en el estado
         setDish(response.data);
       } catch (error) {
         console.error('Error fetching dish data:', error);
       }
     };
+    // Llamada a la funcion para obtener la lista de platos
     fetchDish();
   }, [id]);
-  
+
+  // Funcion para manejar el envio del formulario de actualizacion del plato
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Se realiza una solicitud PUT a la API para actualizar los datos del plato con un id concreto
       await axios.put(`http://localhost:8082/project/api/dishes/${id}`, dish);
+      // Si se actualiza correctamente el plato, se redirige al panel de admin
       navigate("/admin");
     } catch (error) {
       console.error('Error updating dish:', error);
