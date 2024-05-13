@@ -9,15 +9,19 @@ function Login() {
   // Obtiene la funcion setToken del contexto de autenticacion
   const { setToken } = useAuth();
   const navigate = useNavigate();
+
+  // Define los mensajes de validacion
   const messages = {
     req: "Este campo es obligatorio",
     username: "El formato introducido no es el correcto",
-   };
-   const patterns = {
+  };
+  // Define los patrones de validacion de campos
+  const patterns = {
     username: /^[A-Za-z0-9]+$/i
   };
+  // Las validaciones se activan cada vez que cambia el valor de un campo del formulario
   useForm({ mode: "onChange" });
-  
+
   // Utiliza el hook useForm para manejar el estado y las validaciones del formulario
   const { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -75,8 +79,10 @@ function Login() {
               {/* Utiliza handleSubmit de useForm para manejar el envio del formulario */}
               <form onSubmit={handleSubmit(onSubmit)}>
                 {/* Utiliza register de useForm para registrar los inputs y aplicar validaciones */}
-                <MDBInput wrapperClass='mb-4' label='Usuario' id='username' type='text' size="lg" {...register('username', { required: messages.req, 
-                pattern: {value: patterns.username, message: messages.username } })} />
+                <MDBInput wrapperClass='mb-4' label='Usuario' id='username' type='text' size="lg" {...register('username', {
+                  required: messages.req,
+                  pattern: { value: patterns.username, message: messages.username }
+                })} />
                 {errors.username && <p style={{ color: 'red' }}>{errors.username.message}</p>}
                 <MDBInput wrapperClass='mb-4' label='Contraseña' id='password' type='password' size="lg" {...register('password', { required: messages.req })} />
                 {errors.password && <p style={{ color: 'red' }}>{errors.password.message}</p>}

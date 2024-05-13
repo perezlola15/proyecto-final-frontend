@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { MDBContainer, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBIcon } from 'mdb-react-ui-kit';
 import Navbar from '../../navbar/Navbar';
+import { useForm } from 'react-hook-form';
 
 function AddDish() {
   const [dishName, setDishName] = useState('');
@@ -12,6 +13,26 @@ function AddDish() {
   const [categoryId, setCategoryId] = useState('');
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
+
+  // Define los mensajes de validacion
+  const messages = {
+    req: "Este campo es obligatorio",
+    dishName: "El nombre debe tener al menos 6 caracteres",
+    price: "No puedes introducir valores negativos",
+    vat: "No puedes introducir valores negativos",
+    dishDescription: "La descripción debe tener al menos 6 caracteres"
+  };
+
+  // Define los patrones de validacion de campos
+  const patterns = {
+    dishName: /^[A-Za-z0-9]{4,}$/i,
+    dishDescription: /^.{6,}$/,
+    price: /^(?!-)\d+(\.\d+)?$/, 
+    vat: /^(?!-)\d+(\.\d+)?$/
+  };
+
+  // Utiliza el hook useForm para manejar el estado y las validaciones del formulario
+  const { register, handleSubmit, formState: { errors } } = useForm({ mode: "onChange" });
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -28,7 +49,7 @@ function AddDish() {
   }, []);
 
 
-  const handleSubmit = async (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     try {
       // Crea el objeto categoryDish con los atributos
@@ -45,7 +66,7 @@ function AddDish() {
         dishDescription,
         categoryDish
       });
-      // Si la creacion del plato es correcta, redirige al panel de admin
+      // Si se crea el plato correctamente, redirige al panel de admin
       navigate("/admin");
     } catch (error) {
       console.error('Error creating dish:', error);
@@ -62,11 +83,15 @@ function AddDish() {
               <MDBIcon fas icon="cubes fa-3x me-3" />
               <h5 className="fw-normal" style={{ letterSpacing: '1px' }}>Crear plato</h5>
             </div>
-            <form onSubmit={handleSubmit}>
-              <MDBInput wrapperClass='mb-4' label='Nombre del plato' id='dishName' type='text' size="lg" value={dishName} onChange={(e) => setDishName(e.target.value)} />
-              <MDBInput wrapperClass='mb-4' label='Precio' id='price' type='number' size="lg" value={price} onChange={(e) => setPrice(e.target.value)} />
-              <MDBInput wrapperClass='mb-4' label='IVA' id='vat' type='number' size="lg" value={vat} onChange={(e) => setVat(e.target.value)} />
-              <MDBInput wrapperClass='mb-4' label='Descripción del plato' id='dishDescription' type='text' size="lg" value={dishDescription} onChange={(e) => setDishDescription(e.target.value)} />
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <MDBInput wrapperClass='mb-4' label='Nombre del plato' id='username' type='text' size="lg" {...register('dishName', { required: messages.req, pattern: { value: patterns.dishName, message: messages.dishName } })} />
+              {errors.dishName && <p style={{ color: 'red' }}>{errors.dishName.message}</p>}
+              <MDBInput wrapperClass='mb-4' label='Precio' id='price' type='number' size="lg" {...register('price', { required: messages.req, pattern: { value: patterns.price, message: messages.price } })} />
+              {errors.price && <p style={{ color: 'red' }}>{errors.price.message}</p>}
+              <MDBInput wrapperClass='mb-4' label='IVA' id='vat' type='number' size="lg" {...register('vat', { required: messages.req, pattern: { value: patterns.vat, message: messages.vat } })} />
+              {errors.vat && <p style={{ color: 'red' }}>{errors.vat.message}</p>}
+              <MDBInput wrapperClass='mb-4' label='Descripción del plato' id='dishDescription' type='text' size="lg" {...register('dishDescription', { required: messages.req, pattern: { value: patterns.dishDescription, message: messages.dishDescription } })} />
+              {errors.dishDescription && <p style={{ color: 'red' }}>{errors.dishDescription.message}</p>}
               <div className="mb-4">
                 <select
                   id="categoryId"

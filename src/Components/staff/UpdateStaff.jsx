@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { MDBContainer, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBIcon } from 'mdb-react-ui-kit';
 
 const UpdateStaff = () => {
   const [staff, setStaff] = useState({});
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchStaff = async () => {
@@ -18,12 +19,12 @@ const UpdateStaff = () => {
     };
     fetchStaff();
   }, [id]);
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await axios.put(`http://localhost:8082/project/api/staffs/${id}`, staff);
-      // No hay redirección aquí, ya que se ha eliminado useHistory
+      navigate("/admin");
     } catch (error) {
       console.error('Error updating staff:', error);
     }
