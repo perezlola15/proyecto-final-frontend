@@ -60,20 +60,16 @@ const OrdersList = () => {
                 <table>
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Estado</th>
                             <th>Mesa</th>
-
+                            <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         {orders.map(order => (
                             <tr key={order.orderId}>
-                                <td>{order.orderId}</td>
-                                <td>{orderStatusMap[order.orderStatus]}</td>
                                 <td>{order.orderTable}</td>
-
+                                <td>{orderStatusMap[order.orderStatus]}</td>
                                 <td>
                                     <Link to={`/updateOrder/${order.orderId}`} className="button-edit">✏️</Link>
                                     <button className="button-delete" onClick={() => handleDeleteClick(order.orderId)}>🗑️</button>

@@ -12,6 +12,7 @@ const OrderLineList = () => {
 
         const fetchOrderLinesList = async () => {
             try {
+                // Se hace una solicitud GET a la api para obtener los datos de las lineas de pedido
                 const response = await axios.get('http://localhost:8082/project/api/ordersLine');
                 setOrderLines(response.data);
                 setLoading(false);
@@ -20,7 +21,7 @@ const OrderLineList = () => {
                 setLoading(false);
             }
         };
-
+        // Llamada a la funcion para obtener la lista de lineas de pedido
         fetchOrderLinesList();
     }, []);
 
@@ -29,11 +30,11 @@ const OrderLineList = () => {
             const names = {};
             for (const orderLine of orderLines) {
                 try {
-                    // Verificar si existe un plato asociado con la línea de pedido
+                    // Verifica si existe un plato asociado con la linea de pedido
                     if (orderLine.dish) {
-                        // Verificar si el categoryId del plato es distinto de 1
+                        // Verifica si el categoryId del plato es distinto de 1 para no mostrar las bebidas
                         if (orderLine.dish.categoryDish.categoryId !== 1) {
-                            // Obtener el nombre del plato directamente del objeto dish
+                            // Obtiene el nombre del plato del objeto dish
                             names[orderLine.orderLineId] = orderLine.dish.dishName;
                         }
                     } else {
@@ -46,12 +47,22 @@ const OrderLineList = () => {
             }
             setDishNames(names);
         };
-    
+
         if (orderLines.length > 0) {
             fetchDishNames();
         }
     }, [orderLines]);
-    
+
+    const handleEditClick = async (id) => {
+        try {
+            // Realiza la solicitud PUT para actualizar el campo orderStatus a 2
+            await axios.put(`http://localhost:8082/project/api/orders/${id}`, { orderStatus: 2 });
+            // Elimina el pedido (orderLine) de la pantalla actualizando el estado de orderLines
+            setOrderLines(prevOrderLines => prevOrderLines.filter(orderLine => orderLine.orderLineId !== id));
+        } catch (error) {
+            console.error('Error updating order status:', error);
+        }
+    };
 
     if (loading) {
         return <p>Loading...</p>;
@@ -63,19 +74,22 @@ const OrderLineList = () => {
                 <table>
                     <thead>
                         <tr>
-                            <th>Dish Name</th>
-                            <th>Quantity</th>
-                            <th>Note</th>
+                            <th>Nombre</th>
+                            <th>Cantidad</th>
+                            <th>Nota</th>
+                            <th>Acción</th>
                         </tr>
                     </thead>
                     <tbody>
                         {orderLines.map(orderLine => (
-                            // Verificar si el dishName no está vacío antes de renderizar la fila
+                            // Verifica si el dishName no está vacío antes de renderizar la fila
                             (dishNames[orderLine.orderLineId] && (
                                 <tr key={orderLine.orderLineId}>
                                     <td>{dishNames[orderLine.orderLineId]}</td>
                                     <td>{orderLine.quantity}</td>
                                     <td>{orderLine.note}</td>
+                                    {/* Añade el botón de edición con la función handleEditClick */}
+                                    <td><button className="button-edit" onClick={() => handleEditClick(orderLine.orderLineId)}>✅</button></td>
                                 </tr>
                             ))
                         ))}
