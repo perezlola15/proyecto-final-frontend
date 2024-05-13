@@ -1,23 +1,28 @@
-import React, { useState } from 'react';
+import React from 'react';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import { MDBBtn, MDBContainer, MDBCard, MDBCardBody, MDBCardImage, MDBRow, MDBCol, MDBIcon, MDBInput } from 'mdb-react-ui-kit';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from './AuthProvider';
+import { useForm } from 'react-hook-form';
 
 function Login() {
-  // Define los estados del nombre de usuario y la contrasena
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
   // Obtiene la funcion setToken del contexto de autenticacion
   const { setToken } = useAuth();
-
   const navigate = useNavigate();
+  const messages = {
+    req: "Este campo es obligatorio",
+    username: "El formato introducido no es el correcto",
+   };
+   const patterns = {
+    username: /^[A-Za-z0-9]+$/i
+  };
+  useForm({ mode: "onChange" });
+  
+  // Utiliza el hook useForm para manejar el estado y las validaciones del formulario
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
   // Funcion para manejar el envio del formulario de inicio de sesion
-  const handleSubmit = async (event) => {
-    event.preventDefault(); // Evita que el formulario se envie y recargue la pagina
-
+  const onSubmit = async (data) => {
     try {
       // Realiza una solicitud POST para iniciar sesion
       const response = await fetch('http://localhost:8082/project/api/auth/login', {
@@ -25,8 +30,7 @@ function Login() {
         headers: {
           'Content-Type': 'application/json'
         },
-        // Envia el nombre de usuario y la contrasena en formato JSON
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify(data) // Utiliza los datos del formulario obtenidos de useForm
       });
 
       // Obtiene el token de autenticacion del encabezado de la respuesta
@@ -38,7 +42,7 @@ function Login() {
           setToken(token);
 
           // Verifica el nombre de usuario y lo redirgire a una ruta determinada
-          if (username.includes("admin")) {
+          if (data.username.includes("admin")) {
             navigate('/admin'); // Si el nombre de usuario contiene "admin", redirige a la ruta '/admin'
           } else {
             navigate("/options"); // De lo contrario, redirige a la ruta '/options'
@@ -68,10 +72,15 @@ function Login() {
                 <img src='img/logo.png' alt="logo"></img>
               </div>
               <h5 className="fw-normal my-4 pb-3" style={{ letterSpacing: '1px' }}>Inicia sesión en su cuenta</h5>
-              <form onSubmit={handleSubmit}>
-                <MDBInput wrapperClass='mb-4' label='Usuario' id='formControlLg' type='text' size="lg" value={username} onChange={(e) => setUsername(e.target.value)} required />
-                <MDBInput wrapperClass='mb-4' label='Contraseña' id='formControlLg' type='password' size="lg" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                <MDBBtn className="mb-4 px-5 custom-btn-width" color='dark' size='lg' type="submit" onClick={handleSubmit}>Inicia sesión</MDBBtn>
+              {/* Utiliza handleSubmit de useForm para manejar el envio del formulario */}
+              <form onSubmit={handleSubmit(onSubmit)}>
+                {/* Utiliza register de useForm para registrar los inputs y aplicar validaciones */}
+                <MDBInput wrapperClass='mb-4' label='Usuario' id='username' type='text' size="lg" {...register('username', { required: messages.req, 
+                pattern: {value: patterns.username, message: messages.username } })} />
+                {errors.username && <p style={{ color: 'red' }}>{errors.username.message}</p>}
+                <MDBInput wrapperClass='mb-4' label='Contraseña' id='password' type='password' size="lg" {...register('password', { required: messages.req })} />
+                {errors.password && <p style={{ color: 'red' }}>{errors.password.message}</p>}
+                <MDBBtn className="mb-4 px-5 custom-btn-width" color='dark' size='lg' type="submit">Inicia sesión</MDBBtn>
               </form>
               <a className="small text-muted" href="/forgotpass">¿Ha olvidado su contraseña?</a><br /><br />
               <div className='d-flex flex-row justify-content-start'>
