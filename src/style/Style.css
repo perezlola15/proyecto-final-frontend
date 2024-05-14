@@ -118,7 +118,7 @@
   padding-top: 1%;
   padding-bottom: 1%;
   padding-left: 1%;
-  width: 70%;
+  width: 90%;
   height: auto;
   max-height: 20000px;
 }
@@ -333,4 +333,29 @@ img {
   height: auto;
   max-height: 1000px;
 }
+
+/* Dishes list
+.dishes-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dishes-th,
+.dishes-td {
+  padding: 8px;
+  text-align: left;
+}
+
+.dishes-td:first-child {
+  width: 40%;
+}
+
+.dishes-td:nth-child(2) {
+  width: 20%;
+}
+
+.dishes-td:nth-child(3) {
+  width: 25%;
+} */
+
 
