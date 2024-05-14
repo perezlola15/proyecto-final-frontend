@@ -44,6 +44,20 @@ const OrderDetail = () => {
             for (const orderLine of orderLines) {
                 try {
                     if (orderLine.dish && orderLine.orderId === parseInt(orderId)) {
+                        names[orderLine.orderLineId] = orderLine.dish.dishName;
+                    }
+                } catch (error) {
+                    console.error('Error fetching dish name:', error);
+                }
+            }
+            setDishNames(names);
+        };
+
+        /*const fetchDishNames = async () => {
+            const names = {};
+            for (const orderLine of orderLines) {
+                try {
+                    if (orderLine.dish && orderLine.orderId === parseInt(orderId)) {
                         if (orderLine.dish.categoryDish.categoryId !== 1) {
                             names[orderLine.orderLineId] = orderLine.dish.dishName;
                         }
@@ -52,11 +66,10 @@ const OrderDetail = () => {
                     }
                 } catch (error) {
                     console.error('Error fetching dish name:', error);
-                    names[orderLine.orderLineId] = 'Nombre no disponible';
                 }
             }
             setDishNames(names);
-        };
+        }; */
 
         if (orderLines.length > 0) {
             fetchDishNames();
