@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import '../../style/Style.css';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const StaffList = () => {
   const [staffs, setStaffs] = useState([]);
@@ -27,14 +29,31 @@ const StaffList = () => {
 
   const handleDeleteClick = (id) => {
     setDeleteId(id);
+    confirmDelete(id);
   };
 
-  const confirmDelete = async () => {
+  const confirmDelete = (id) => {
+    confirmAlert({
+      title: 'Confirmar eliminación',
+      message: '¿Estás seguro de que deseas eliminar este usuario?',
+      buttons: [
+        {
+          label: 'Sí',
+          onClick: () => deleteStaff(id)
+        },
+        {
+          label: 'No',
+          onClick: () => setDeleteId(null)
+        }
+      ]
+    });
+  };
+
+  const deleteStaff = async (id) => {
     try {
-      await axios.delete(`http://localhost:8082/project/api/staffs/${deleteId}`);
-      let updatedStaffs = staffs.filter(staff => staff.staffId !== deleteId);
+      await axios.delete(`http://localhost:8082/project/api/staffs/${id}`);
+      let updatedStaffs = staffs.filter(staff => staff.staffId !== id);
       setStaffs(updatedStaffs);
-      setDeleteId(null);
     } catch (error) {
       console.error('Error deleting staff:', error);
     }
@@ -72,15 +91,6 @@ const StaffList = () => {
           </tbody>
         </table>
       </div>
-      {deleteId !== null && (
-        <div className="confirmation-message">
-          <p>¿Estás seguro de que deseas eliminar este usuario?</p>
-          <div>
-            <button className="confirm-button" onClick={confirmDelete}>Sí</button>
-            <button className="cancel-button" onClick={() => setDeleteId(null)}>No</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

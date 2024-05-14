@@ -53,16 +53,16 @@ const OrderLineList = () => {
         }
     }, [orderLines]);
 
-    const handleEditClick = async (id) => {
+    const handleEditClick = async (orderId) => {
         try {
-            // Realiza la solicitud PUT para actualizar el campo orderStatus a 2
-            await axios.put(`http://localhost:8082/project/api/orders/${id}`, { orderStatus: 2 });
+            // Realiza la solicitud PATCH para actualizar el campo orderStatus a 2
+            await axios.patch(`http://localhost:8082/project/api/orders/${orderId}`, { orderStatus: 2 });
             // Elimina el pedido (orderLine) de la pantalla actualizando el estado de orderLines
-            setOrderLines(prevOrderLines => prevOrderLines.filter(orderLine => orderLine.orderLineId !== id));
+            setOrderLines(prevOrderLines => prevOrderLines.filter(orderLine => orderLine.orderId !== orderId));
         } catch (error) {
             console.error('Error updating order status:', error);
         }
-    };
+    };    
 
     if (loading) {
         return <p>Loading...</p>;
@@ -88,8 +88,7 @@ const OrderLineList = () => {
                                     <td>{dishNames[orderLine.orderLineId]}</td>
                                     <td>{orderLine.quantity}</td>
                                     <td>{orderLine.note}</td>
-                                    {/* Añade el botón de edición con la función handleEditClick */}
-                                    <td><button className="button-edit" onClick={() => handleEditClick(orderLine.orderLineId)}>✅</button></td>
+                                    <td><button className="button-edit" onClick={() => handleEditClick(orderLine.orderId)}>✅</button></td>
                                 </tr>
                             ))
                         ))}

@@ -53,26 +53,6 @@
   background-color: white;
 }
 
-/* Modal */
-.confirm-button,
-.cancel-button {
-  padding: 10px 20px;
-  margin-right: 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.confirm-button {
-  background-color: #4CAF50;
-  color: white;
-}
-
-.cancel-button {
-  background-color: #f44336;
-  color: white;
-}
-
 /* StaffList */
 .staff-container {
   display: flex;
@@ -353,3 +333,4 @@ img {
   height: auto;
   max-height: 1000px;
 }
+

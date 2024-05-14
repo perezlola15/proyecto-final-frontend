@@ -2,16 +2,14 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
 import Navbar from '../../navbar/Navbar';
+import '../../style/Style.css';
 
 const OrderDetail = () => {
     const { orderId } = useParams();
     const [order, setOrder] = useState(null);
+    const [orderLines, setOrderLines] = useState([]);
     const [loading, setLoading] = useState(true);
     const [dishNames, setDishNames] = useState({});
-    const orderStatusMap = {
-        1: 'En proceso',
-        2: 'Preparado'
-    };
 
     useEffect(() => {
         setLoading(true);
@@ -27,15 +25,25 @@ const OrderDetail = () => {
             }
         };
 
+        const fetchOrderLinesList = async () => {
+            try {
+                const response = await axios.get('http://localhost:8082/project/api/ordersLine');
+                setOrderLines(response.data);
+            } catch (error) {
+                console.error('Error fetching order lines:', error);
+            }
+        };
+
         fetchOrderDetails();
+        fetchOrderLinesList();
     }, [orderId]);
 
     useEffect(() => {
         const fetchDishNames = async () => {
             const names = {};
-            for (const orderLine of order.orderLines) {
+            for (const orderLine of orderLines) {
                 try {
-                    if (orderLine.dish) {
+                    if (orderLine.dish && orderLine.orderId === parseInt(orderId)) {
                         if (orderLine.dish.categoryDish.categoryId !== 1) {
                             names[orderLine.orderLineId] = orderLine.dish.dishName;
                         }
@@ -50,14 +58,19 @@ const OrderDetail = () => {
             setDishNames(names);
         };
 
-        if (order && order.orderLines && order.orderLines.length > 0) {
+        if (orderLines.length > 0) {
             fetchDishNames();
         }
-    }, [order]);
+    }, [orderLines, orderId]);
 
     if (loading) {
         return <p>Loading...</p>;
     }
+
+    const orderStatusMap = {
+        1: 'En proceso',
+        2: 'Preparado'
+    };
 
     return (
         <div>
@@ -77,7 +90,7 @@ const OrderDetail = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {order.orderLines && order.orderLines.map(orderLine => (
+                                {orderLines.map(orderLine => (
                                     (dishNames[orderLine.orderLineId] && (
                                         <tr key={orderLine.orderLineId}>
                                             <td>{dishNames[orderLine.orderLineId]}</td>

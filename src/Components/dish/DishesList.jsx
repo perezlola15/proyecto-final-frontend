@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../../style/Style.css';
 import { Link } from 'react-router-dom';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import { useAuth } from '../../auth/AuthProvider';
 
 const DishesList = () => {
@@ -36,17 +38,35 @@ const DishesList = () => {
     // Funcion para manejar el clic en el boton de eliminar un plato
     const handleDeleteClick = (id) => {
         setDeleteId(id);
+        confirmDelete(id);
     };
 
-    // Funcion para confirmar la eliminacion del plato
-    const confirmDelete = async () => {
+    // Funcion para mostrar el cuadro de dialogo de confirmacion
+    const confirmDelete = (id) => {
+        confirmAlert({
+            title: 'Confirmar eliminación',
+            message: '¿Estás seguro de que deseas eliminar este plato?',
+            buttons: [
+                {
+                    label: 'Sí',
+                    onClick: () => deleteDish(id)
+                },
+                {
+                    label: 'No',
+                    onClick: () => setDeleteId(null)
+                }
+            ]
+        });
+    };
+
+    // Funcion para eliminar un plato
+    const deleteDish = async (id) => {
         try {
             // Se realiza una solicitud DELETE a la api para eliminar el plato con un id concreto
-            await axios.delete(`http://localhost:8082/project/api/dishes/${deleteId}`);
+            await axios.delete(`http://localhost:8082/project/api/dishes/${id}`);
             // Se filtran los platos actualizados excluyendo el plato eliminado
-            let updatedDishes = dishes.filter(dish => dish.dishId !== deleteId);
+            let updatedDishes = dishes.filter(dish => dish.dishId !== id);
             setDishes(updatedDishes);
-            setDeleteId(null);
         } catch (error) {
             console.error('Error deleting dish:', error);
         }
@@ -99,16 +119,6 @@ const DishesList = () => {
                     </div>
                 ))}
             </div>
-
-            {deleteId !== null && (
-                <div className="confirmation-message">
-                    <p>¿Estás seguro de que deseas eliminar este plato?</p>
-                    <div>
-                        <button className="confirm-button" onClick={confirmDelete}>Sí</button>
-                        <button className="cancel-button" onClick={() => setDeleteId(null)}>No</button>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };

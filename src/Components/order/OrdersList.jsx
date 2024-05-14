@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../../style/Style.css';
 import { Link } from 'react-router-dom';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const OrdersList = () => {
     const [orders, setOrders] = useState([]);
@@ -15,7 +17,6 @@ const OrdersList = () => {
     useEffect(() => {
         setLoading(true);
 
-        // Funcion para obtener la lista de pedidos desde la api
         const fetchOrdersList = async () => {
             try {
                 const response = await axios.get('http://localhost:8082/project/api/orders');
@@ -26,22 +27,36 @@ const OrdersList = () => {
                 setLoading(false);
             }
         };
-        // Llamada a la funcion para obtener la lista de pedidos
+
         fetchOrdersList();
     }, []);
 
-    // Funcion para manejar el evento de eliminar un pedido
     const handleDeleteClick = (id) => {
         setDeleteId(id);
+        confirmDelete(id);
     };
 
-    // Funcion para manejar el evento de confirmar la eliminacion de un pedido
-    const confirmDelete = async () => {
+    const confirmDelete = (id) => {
+        confirmAlert({
+            title: 'Confirmar eliminación',
+            message: '¿Estás seguro de que deseas eliminar este pedido?',
+            buttons: [
+                {
+                    label: 'Sí',
+                    onClick: () => deleteOrder(id)
+                },
+                {
+                    label: 'No',
+                    onClick: () => setDeleteId(null)
+                }
+            ]
+        });
+    };
+
+    const deleteOrder = async (id) => {
         try {
-            // Se realiza una solicitud DELETE a la api para eliminar el pedido con un id concreto
-            await axios.delete(`http://localhost:8082/project/api/orders/${deleteId}`);
-            // Se filtran los pedido actualizados excluyendo el pedido eliminado
-            let updatedOrders = orders.filter(order => order.orderId !== deleteId);
+            await axios.delete(`http://localhost:8082/project/api/orders/${id}`);
+            let updatedOrders = orders.filter(order => order.orderId !== id);
             setOrders(updatedOrders);
             setDeleteId(null);
         } catch (error) {
@@ -80,16 +95,6 @@ const OrdersList = () => {
                     </tbody>
                 </table>
             </div>
-
-            {deleteId !== null && (
-                <div className="confirmation-message">
-                    <p>¿Estás seguro de que deseas eliminar esta orden?</p>
-                    <div>
-                        <button className="confirm-button" onClick={confirmDelete}>Sí</button>
-                        <button className="cancel-button" onClick={() => setDeleteId(null)}>No</button>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };
