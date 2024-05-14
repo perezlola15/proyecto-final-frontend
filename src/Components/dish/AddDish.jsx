@@ -17,18 +17,20 @@ function AddDish() {
   // Define los mensajes de validacion
   const messages = {
     req: "Este campo es obligatorio",
-    dishName: "El nombre debe tener al menos 6 caracteres",
-    price: "No puedes introducir valores negativos",
-    vat: "No puedes introducir valores negativos",
+    dishName: "Solo se admiten caracteres alfanuméricos",
+    dishName_length: "El nombre debe tener al menos 4 caracteres",
+    price: "No puede introducir valores negativos",
+    vat: "No puede introducir valores negativos",
     dishDescription: "La descripción debe tener al menos 6 caracteres"
   };
 
   // Define los patrones de validacion de campos
   const patterns = {
-    dishName: /^[A-Za-z0-9]{4,}$/i,
-    dishDescription: /^.{6,}$/,
+    dishName: /^[A-Za-z0-9]+$/i,
+    dishName_length: /^.{4,}$/,
     price: /^(?!-)\d+(\.\d+)?$/, 
-    vat: /^(?!-)\d+(\.\d+)?$/
+    vat: /^(?!-)\d+(\.\d+)?$/,
+    dishDescription: /^.{6,}$/
   };
 
   // Utiliza el hook useForm para manejar el estado y las validaciones del formulario
@@ -86,6 +88,7 @@ function AddDish() {
             <form onSubmit={handleSubmit(onSubmit)}>
               <MDBInput wrapperClass='mb-4' label='Nombre del plato' id='username' type='text' size="lg" {...register('dishName', { required: messages.req, pattern: { value: patterns.dishName, message: messages.dishName } })} />
               {errors.dishName && <p style={{ color: 'red' }}>{errors.dishName.message}</p>}
+              {errors.dishName_length && <p style={{ color: 'red' }}>{errors.dishName_length.message}</p>}
               <MDBInput wrapperClass='mb-4' label='Precio' id='price' type='number' size="lg" {...register('price', { required: messages.req, pattern: { value: patterns.price, message: messages.price } })} />
               {errors.price && <p style={{ color: 'red' }}>{errors.price.message}</p>}
               <MDBInput wrapperClass='mb-4' label='IVA' id='vat' type='number' size="lg" {...register('vat', { required: messages.req, pattern: { value: patterns.vat, message: messages.vat } })} />
@@ -110,7 +113,7 @@ function AddDish() {
               </div>
             </form>
             <div className="d-flex justify-content-center">
-              <Link to="/admin" className="mb-4 px-6 custom-btn-width btn btn-dark btn-lg">Volver atrás</Link>
+              <Link to="/admin" className="mb-4 px-6 custom-btn-width btn btn-dark btn-lg">Volver</Link>
             </div>
           </MDBCardBody>
         </MDBCard>

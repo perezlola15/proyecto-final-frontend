@@ -13,7 +13,7 @@ function Login() {
   // Define los mensajes de validacion
   const messages = {
     req: "Este campo es obligatorio",
-    username: "El formato introducido no es el correcto",
+    username: "Solo se admiten caracteres alfanuméricos"
   };
   // Define los patrones de validacion de campos
   const patterns = {
@@ -52,13 +52,13 @@ function Login() {
             navigate("/options"); // De lo contrario, redirige a la ruta '/options'
           }
         } else {
-          console.error('Error: No se recibió un token en la respuesta.');
+          console.error('Error: No token received in response.');
         }
       } else {
-        console.error('Error en la solicitud:', response.status);
+        console.error('Request error:', response.status);
       }
     } catch (error) {
-      console.error('Error al iniciar sesión:', error);
+      console.error('Sign in failed :', error);
     }
   };
 
@@ -76,13 +76,9 @@ function Login() {
                 <img src='img/logo.png' alt="logo"></img>
               </div>
               <h5 className="fw-normal my-4 pb-3" style={{ letterSpacing: '1px' }}>Inicia sesión en su cuenta</h5>
-              {/* Utiliza handleSubmit de useForm para manejar el envio del formulario */}
               <form onSubmit={handleSubmit(onSubmit)}>
-                {/* Utiliza register de useForm para registrar los inputs y aplicar validaciones */}
-                <MDBInput wrapperClass='mb-4' label='Usuario' id='username' type='text' size="lg" {...register('username', {
-                  required: messages.req,
-                  pattern: { value: patterns.username, message: messages.username }
-                })} />
+                <MDBInput wrapperClass='mb-4' label='Usuario' id='username' type='text' size="lg" {...register('username', { required: messages.req, 
+                pattern: { value: patterns.username, message: messages.username } })} />
                 {errors.username && <p style={{ color: 'red' }}>{errors.username.message}</p>}
                 <MDBInput wrapperClass='mb-4' label='Contraseña' id='password' type='password' size="lg" {...register('password', { required: messages.req })} />
                 {errors.password && <p style={{ color: 'red' }}>{errors.password.message}</p>}

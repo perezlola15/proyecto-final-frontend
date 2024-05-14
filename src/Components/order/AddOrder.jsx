@@ -168,10 +168,9 @@ const DishesList = () => {
                     </div>
                 ))}
             </div>
-            <button className="mb-4 px-6 custom-btn-width btn btn-dark btn-lg" style={{ marginLeft: '1%' }} onClick={handleCreateOrder}>Crear Pedido</button>
-            <button className="mb-4 px-6 custom-btn-width btn btn-dark btn-lg" style={{ marginLeft: '1%' }}>
-                <Link to="/admin" style={{ color: 'white', textDecoration: 'none' }}>Volver atrás</Link>
-            </button>
+            <button className="mb-4 px-6 custom-btn-width btn btn-dark btn-lg" style={{ marginLeft: '1%' }} onClick={handleCreateOrder}>Crear Pedido</button><br />
+            <Link to="/admin" className="mb-4 px-6 custom-btn-width btn btn-dark btn-lg" style={{ marginLeft: '1%' }}>Volver a Admin</Link>
+                    <Link to="/lounge" className="mb-4 px-6 custom-btn-width btn btn-dark btn-lg" style={{ marginLeft: '1%' }}>Volver a Lounge</Link>
         </div>
     );
 };

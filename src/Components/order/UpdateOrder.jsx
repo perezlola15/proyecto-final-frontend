@@ -54,7 +54,7 @@ const UpdateOrder = () => {
                 <MDBBtn className="mb-4 custom-btn-width" color='dark' size='lg' type="submit">Actualizar</MDBBtn>
               </div>
               <div className="d-flex justify-content-center">
-                <Link to="/admin" className="mb-4 px-6 custom-btn-width btn btn-dark btn-lg">Volver atrás</Link>
+                <Link to="/admin" className="mb-4 px-6 custom-btn-width btn btn-dark btn-lg">Volver</Link>
               </div>
             </form>
           </MDBCardBody>

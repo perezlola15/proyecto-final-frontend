@@ -14,13 +14,16 @@ function AddStaff() {
   // Define los mensajes de validacion
   const messages = {
     req: "Este campo es obligatorio",
-    username: "El formato introducido no es el correcto",
+    username: "Solo se admiten caracteres alfanuméricos",
+    username_length: "El nombre de usuario debe tener al menos 4 caracteres",
     password: "La contraseña debe tener al menos 6 caracteres"
   };
 
   // Define los patrones de validacion de campos
   const patterns = {
-    username: /^[A-Za-z0-9]{4,}$/i,
+    //username: /^[A-Za-z0-9]{4,}$/i,
+    username: /^[A-Za-z0-9]+$/i,
+    username_length: /^.{4,}$/,
     password: /^.{6,}$/
   };
 
@@ -55,8 +58,9 @@ function AddStaff() {
               <h5 className="fw-normal" style={{ letterSpacing: '1px' }}>Crear usuario</h5>
             </div>
             <form onSubmit={handleSubmit(onSubmit)}>
-              <MDBInput wrapperClass='mb-4' label='Usuario' id='username' type='text' size="lg" {...register('username', { required: messages.req, pattern: { value: patterns.username, message: messages.username } })} />
+              <MDBInput wrapperClass='mb-4' label='Usuario' id='username' type='text' size="lg" {...register('username', { required: messages.req, pattern: { value: patterns.username, message: messages.username}, minLength: { value: 4, message: messages.username_length } })} />
               {errors.username && <p style={{ color: 'red' }}>{errors.username.message}</p>}
+              {errors.username_length && <p style={{ color: 'red' }}>{errors.username_length.message}</p>}
               <MDBInput wrapperClass='mb-4' label='Contraseña' id='password' type='password' size="lg" {...register('password', { required: messages.req, pattern: { value: patterns.password, message: messages.password } })} />
               {errors.password && <p style={{ color: 'red' }}>{errors.password.message}</p>}
               <div className='form-check mb-4'>
@@ -72,7 +76,7 @@ function AddStaff() {
               </div>
             </form>
             <div className="d-flex justify-content-center">
-              <Link to="/admin" className="mb-4 px-6 custom-btn-width btn btn-dark btn-lg">Volver atrás</Link>
+              <Link to="/admin" className="mb-4 px-6 custom-btn-width btn btn-dark btn-lg">Volver</Link>
             </div>
           </MDBCardBody>
         </MDBCard>

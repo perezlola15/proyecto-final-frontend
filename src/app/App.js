@@ -11,6 +11,7 @@ import UpdateDish from '../components/dish/UpdateDish';
 import AddDish from '../components/dish/AddDish';
 import AddOrder from '../components/order/AddOrder';
 import UpdateOrder from '../components/order/UpdateOrder';
+import OrderDetail from '../components/order/OrderDetail';
 import NotFound from '../components/NotFound';
 import Logout from '../auth/Logout';
 import ProtectedRoute from '../auth/ProtectedRoute';
@@ -33,6 +34,7 @@ function App() {
           <Route path="/updateDish/:id" element={<UpdateDish />} />
           <Route path="/addOrder" element={<AddOrder />} />
           <Route path="/updateOrder/:id" element={<UpdateOrder />} />
+          <Route path="/order/:orderId" element={<OrderDetail />} />
         </Route>
         <Route path="/logout" element={<Logout />} />
       </Routes>

@@ -10,7 +10,7 @@ function Lounge() {
       <Navbar />
       <h2 style={{ marginTop: '1%' }} className='admin-title'>Pedidos</h2>
       <OrdersList />
-      <Link to="/options" className="mb-4 px-6 custom-btn-width btn btn-dark btn-lg">Volver</Link>
+      <Link to="/options" className="mb-4 px-6 custom-btn-width btn btn-dark btn-lg" style={{ marginLeft: '1%' }}>Volver</Link>
     </div>
   );
 }
