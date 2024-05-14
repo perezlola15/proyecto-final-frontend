@@ -28,7 +28,7 @@ function AddDish() {
   const patterns = {
     dishName: /^[A-Za-z0-9]+$/i,
     dishName_length: /^.{4,}$/,
-    price: /^(?!-)\d+(\.\d+)?$/, 
+    price: /^(?!-)\d+(\.\d+)?$/,
     vat: /^(?!-)\d+(\.\d+)?$/,
     dishDescription: /^.{6,}$/
   };
@@ -51,8 +51,7 @@ function AddDish() {
   }, []);
 
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async () => {
     try {
       // Crea el objeto categoryDish con los atributos
       const categoryDish = {
@@ -86,7 +85,7 @@ function AddDish() {
               <h5 className="fw-normal" style={{ letterSpacing: '1px' }}>Crear plato</h5>
             </div>
             <form onSubmit={handleSubmit(onSubmit)}>
-              <MDBInput wrapperClass='mb-4' label='Nombre del plato' id='username' type='text' size="lg" {...register('dishName', { required: messages.req, pattern: { value: patterns.dishName, message: messages.dishName } })} />
+              <MDBInput wrapperClass='mb-4' label='Nombre del plato' id='username' type='text' size="lg" {...register('dishName', { required: messages.req, pattern: { value: patterns.dishName, message: messages.dishName }, minLength: { value: 4, message: messages.dishName_length } })} />
               {errors.dishName && <p style={{ color: 'red' }}>{errors.dishName.message}</p>}
               {errors.dishName_length && <p style={{ color: 'red' }}>{errors.dishName_length.message}</p>}
               <MDBInput wrapperClass='mb-4' label='Precio' id='price' type='number' size="lg" {...register('price', { required: messages.req, pattern: { value: patterns.price, message: messages.price } })} />

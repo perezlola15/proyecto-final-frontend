@@ -5,8 +5,8 @@ import { MDBContainer, MDBCard, MDBCardBody, MDBInput, MDBBtn, MDBIcon } from 'm
 import { useForm } from 'react-hook-form';
 
 function AddStaff() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  /*const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');*/
   const [disabled, setDisabled] = useState(false);
   const [locked, setLocked] = useState(false);
   const navigate = useNavigate();
